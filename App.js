@@ -1,15 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View,Image } from 'react-native';
+import { StyleSheet, Text, View,Image,TouchableOpacity } from 'react-native';
 import {useEffect,useState} from 'react'
 import {WebView} from 'react-native-webview';
 import netinfo,{NetInfoStateType} from '@react-native-community/netinfo';
-
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 export default function App() {
   const [isConnected,setConnected] = useState(true)
   useEffect(() => {
     const unsubscribe = netinfo.addEventListener((state) => {
-      console.log("Connection type", state.type);
-      console.log("Is connected?", state.isConnected);
       setConnected(state.isConnected)
     });
     return () => 
@@ -18,7 +17,7 @@ export default function App() {
     }
   },[])
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1}}>
       {isConnected ? (
         <WebView source={{ uri: 'https://frontend-vue-elibrary.vercel.app/' }} />
       ) : (
@@ -26,13 +25,12 @@ export default function App() {
       
         <Image style={styles.image} source={require('./assets/delete.png')}></Image>
         <Text>Tidak Terhubung Ke Internet !</Text>
-        <StatusBar style="auto" />
+        <StatusBar hidden/>
       </View>
       )}
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   container:{
     flex: 2,
@@ -43,5 +41,5 @@ const styles = StyleSheet.create({
   image:{
     width: 200,
     height: 200,
-  }
+  },
 });
